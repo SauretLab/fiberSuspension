@@ -13,7 +13,6 @@ The run will continue to completion after connection is closed.
 """
 #%% Import CHEMYX serial connection module/driver
 from core import connect
-
 # get open port info
 portinfo = connect.getOpenPorts() 
 
@@ -31,10 +30,10 @@ if __name__=='__main__':
     # Setup parameters for basic run
     units='mL/min'		 	# OPTIONS: 'mL/min','mL/hr','μL/min','μL/hr'
     diameter=28.6           # 28.6mm diameter - can be set in pump GUI
-    volume=1                # 1 mL volume
-    rate=1                  # 1 mL/min flow rate
+    volume=-10                # 1 mL volume
+    rate=0.5                  # 1 mL/min flow rate
     runtime=volume/rate     # this is calculated implictly by pump
-    delay=0.5               # 30 second delay
+    delay=0               # 30 second delay
     
     # Communicate parameters to pump
     conn.setUnits(units)
