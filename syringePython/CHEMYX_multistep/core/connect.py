@@ -38,7 +38,7 @@ def parsePortName(portinfo):
     return portlist
 
 class Connection(object):
-    def __init__(self, port, baudrate, x = 0, mode = 0, verbose=False):
+    def __init__(self, port, baudrate, x = 0, mode = 0, verbose=True):
         self.port = port
         self.baudrate = baudrate
         self.x = x
