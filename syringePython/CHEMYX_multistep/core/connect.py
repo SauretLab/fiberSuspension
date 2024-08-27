@@ -195,6 +195,14 @@ class Connection(object):
         command = 'pump status'
         response = self.sendCommand(command)
         return response
+    def getPressure(self): #illegal command i created
+        command = 'pressure'
+        response = self.sendCommand(command)
+        return response
+    def help(self): #illegal command i created
+        command = 'view pressure'
+        response = self.sendCommand(command)
+        return response
     def addMode(self, command):
         if self.mode == 0:
             return command
