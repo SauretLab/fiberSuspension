@@ -1,7 +1,7 @@
 clear
 clc
 
-dataNames = {"5_old", "10_old","10_press", "5", "10"};
+dataNames = {"5_old", "10_old","10_press", "5_600um", "10_600um", "5", "10", "1_old","1"};
 
 for nDatasets = 1:length(dataNames)
 
@@ -20,9 +20,24 @@ for nDatasets = 1:length(dataNames)
 
     %%%%%%%%%%%%%%%%%%%% Nozzle %%%%%%%%%%%%%%%%%%%%%%%%%%%%
     % diameter 1.5 mm
+    t_clog_phi_5_600um = readmatrix('/Users/raaghavt/Desktop/UCSB/Summer/FiberClogging/fiber/autoSys/clogData/clogTimes_image_phi_5_L600um_d50um_a1-5mm_newShape');
+
+
+    t_clog_phi_5_600um(t_clog_phi_5_600um < 5.1 | t_clog_phi_5_600um > 1000) = [];
+    t_clog_phi_5_600um = t_clog_phi_5_600um.';
+
+    t_clog_phi_10_600um = readmatrix('/Users/raaghavt/Desktop/UCSB/Summer/FiberClogging/fiber/autoSys/clogData/clogTimes_image_phi_10_L600um_d50um_a1-5mm_newShape');
+
+    t_clog_phi_10_600um(t_clog_phi_10_600um < 5.1 | t_clog_phi_10_600um > 1000) = [];
+    t_clog_phi_10_600um = t_clog_phi_10_600um.';
 
     %%%% phi=1%
-    t_clog_phi_1 =[2041, 1819, 1251];
+    t_clog_phi_1_old =[2041, 1819, 1251, 2041, 1819, 1251]; %%Duplicated to fix code, only first 3 are real points
+
+    t_clog_phi_1 = readmatrix('/Users/raaghavt/Desktop/UCSB/Summer/FiberClogging/fiber/autoSys/clogData/clogTimes_image_phi_1_L1000um_d50um_a1-5mm_newShape');
+
+    t_clog_phi_1(t_clog_phi_1 < 6 | t_clog_phi_1 > 6000) = [];
+    t_clog_phi_1 = t_clog_phi_1.';
 
     t_clog_phi_5_old  = [2155, 370, 995, 617, 285, 1318, 223, 309, 166, 218, 740, 59, 703, 288, 168];
 
@@ -66,7 +81,11 @@ for nDatasets = 1:length(dataNames)
     axis_phi_5 = [0 100 0 150];
     axis_phi_10 = [0 85 0 100];
 
+    axis_phi_5_600um = [0 50 0 500];
+    axis_phi_10_600um = [0 210 0 200];
 
+    axis_phi_1_old = [0 3 0 3000];
+    axis_phi_1 = [0 20 0 300];
 
     figtix = (nDatasets - 1) * 5;
 
@@ -76,7 +95,6 @@ for nDatasets = 1:length(dataNames)
         showThisPhi = t_clog_phi_5_old;  % Assuming t_clog_phi_10 exists
         useThisAxis = axis_phi_5_old;    % Assuming axis_phi_10 exists
         showThisTitle = 'phi old = 5%';
-
     elseif contains(dataNames{nDatasets}, '10_old')
         showThisPhi = t_clog_phi_10_old;  % Assuming t_clog_phi_10 exists
         useThisAxis = axis_phi_10_old;    % Assuming axis_phi_10 exists
@@ -85,6 +103,14 @@ for nDatasets = 1:length(dataNames)
         showThisPhi = t_clog_phi_10_press;  % Assuming t_clog_phi_10 exists
         useThisAxis = axis_phi_10_press;    % Assuming axis_phi_10 exists
         showThisTitle = 'phi prs = 10%';
+    elseif contains(dataNames{nDatasets}, '5_600um')
+        showThisPhi = t_clog_phi_5_600um;  % Assuming t_clog_phi_5 exists
+        useThisAxis = axis_phi_5_600um;    % Assuming axis_phi_5 exists
+        showThisTitle = 'phi viz = 5%, L600um';
+    elseif contains(dataNames{nDatasets}, '10_600um')
+        showThisPhi = t_clog_phi_10_600um;  % Assuming t_clog_phi_10 exists
+        useThisAxis = axis_phi_10_600um;    % Assuming axis_phi_10 exists
+        showThisTitle = 'phi viz = 10%, L600um';
     elseif contains(dataNames{nDatasets}, '5')
         showThisPhi = t_clog_phi_5;  % Assuming t_clog_phi_5 exists
         useThisAxis = axis_phi_5;    % Assuming axis_phi_5 exists
@@ -93,6 +119,14 @@ for nDatasets = 1:length(dataNames)
         showThisPhi = t_clog_phi_10;  % Assuming t_clog_phi_10 exists
         useThisAxis = axis_phi_10;    % Assuming axis_phi_10 exists
         showThisTitle = 'phi viz = 10%';
+    elseif contains(dataNames{nDatasets}, '1_old')
+        showThisPhi = t_clog_phi_1_old;  % Assuming t_clog_phi_10 exists
+        useThisAxis = axis_phi_1_old;    % Assuming axis_phi_10 exists
+        showThisTitle = 'phi old = 1%'; 
+    elseif contains(dataNames{nDatasets}, '1')
+        showThisPhi = t_clog_phi_1;  % Assuming t_clog_phi_10 exists
+        useThisAxis = axis_phi_1;    % Assuming axis_phi_10 exists
+        showThisTitle = 'phi viz = 1%'; 
     end
 
 
@@ -313,5 +347,5 @@ for nDatasets = 1:length(dataNames)
 
     clear
 
-    dataNames = {"5_old", "10_old","10_press", "5", "10"};
+    dataNames = {"5_old", "10_old","10_press", "5_600um", "10_600um", "5", "10", "1_old","1"};
 end
