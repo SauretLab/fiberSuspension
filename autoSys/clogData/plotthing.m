@@ -1,7 +1,9 @@
-T = readmatrix('/Users/raaghavt/Desktop/UCSB/Summer/FiberClogging/fiber/autoSys/clogData/clogTimes_image_phi_1_L1000um_d50um_a1-5mm_newShape');
+T = readmatrix('/Users/raaghavt/Desktop/UCSB/Summer/FiberClogging/fiber/autoSys/clogData/lightSignal_phi_30_ts500');
 
 hold on
-i = 1: length(T);
+i = (1:length(T))/4;
 
-scatter(i,T)
+plot(i,T)
 
+xlabel('time(s)')
+ylabel('average brightness')

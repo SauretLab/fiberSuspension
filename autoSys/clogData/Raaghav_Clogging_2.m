@@ -1,7 +1,7 @@
 clear
 clc
 
-dataNames = {"5_old", "10_old","10_press", "5_600um", "10_600um", "5", "10", "1_old","1"};
+dataNames = {"5_old", "10_old","10_press", "5_600um", "10_600um", "5", "10", "1_old","1","20_600um"};
 
 for nDatasets = 1:length(dataNames)
 
@@ -30,6 +30,16 @@ for nDatasets = 1:length(dataNames)
 
     t_clog_phi_10_600um(t_clog_phi_10_600um < 5.1 | t_clog_phi_10_600um > 1000) = [];
     t_clog_phi_10_600um = t_clog_phi_10_600um.';
+
+    t_clog_phi_20_600um = readmatrix('/Users/raaghavt/Desktop/UCSB/Summer/FiberClogging/fiber/autoSys/clogData/clogTimes_image_phi_20_L600um_d50um_a1-5mm_newShape');
+
+    t_clog_phi_20_600um(t_clog_phi_20_600um < 5.1 | t_clog_phi_20_600um > 1000) = [];
+    t_clog_phi_20_600um = t_clog_phi_20_600um.';
+
+    %no filter
+    t_clog_phi_20_600um_NF = readmatrix('/Users/raaghavt/Desktop/UCSB/Summer/FiberClogging/fiber/autoSys/clogData/clogTimes_image_phi_20_L600um_d50um_a1-5mm_newShape');
+
+    t_clog_phi_20_600um_NF = t_clog_phi_20_600um_NF.';
 
     %%%% phi=1%
     t_clog_phi_1_old =[2041, 1819, 1251, 2041, 1819, 1251]; %%Duplicated to fix code, only first 3 are real points
@@ -83,11 +93,13 @@ for nDatasets = 1:length(dataNames)
 
     axis_phi_5_600um = [0 50 0 500];
     axis_phi_10_600um = [0 210 0 200];
+    axis_phi_20_600um = [0 210 0 200];
+    axis_phi_20_600um_NF = [0 1050 0 200];
 
     axis_phi_1_old = [0 3 0 3000];
     axis_phi_1 = [0 20 0 300];
 
-    figtix = (nDatasets - 1) * 5;
+    figtix = (nDatasets - 1) * 5 + 55;
 
     % Dynamically change which variables to use based on `nDatasets`
 
@@ -127,6 +139,14 @@ for nDatasets = 1:length(dataNames)
         showThisPhi = t_clog_phi_1;  % Assuming t_clog_phi_10 exists
         useThisAxis = axis_phi_1;    % Assuming axis_phi_10 exists
         showThisTitle = 'phi viz = 1%'; 
+    elseif contains(dataNames{nDatasets}, 'elephant')
+        showThisPhi = t_clog_phi_20_600um_NF;  % Assuming t_clog_phi_10 exists
+        useThisAxis = axis_phi_20_600um_NF;    % Assuming axis_phi_10 exists
+        showThisTitle = 'phi viz no filter = 20%'; 
+    elseif contains(dataNames{nDatasets}, '20_600um')
+        showThisPhi = t_clog_phi_20_600um;  % Assuming t_clog_phi_10 exists
+        useThisAxis = axis_phi_20_600um;    % Assuming axis_phi_10 exists
+        showThisTitle = 'phi viz = 20%'; 
     end
 
 
@@ -347,5 +367,5 @@ for nDatasets = 1:length(dataNames)
 
     clear
 
-    dataNames = {"5_old", "10_old","10_press", "5_600um", "10_600um", "5", "10", "1_old","1"};
+    dataNames = {"5_old", "10_old","10_press", "5_600um", "10_600um", "5", "10", "1_old","1","20_600um_NF","20_600um"};
 end
