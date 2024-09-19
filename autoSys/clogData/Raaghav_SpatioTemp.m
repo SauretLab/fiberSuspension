@@ -1,7 +1,7 @@
 close all
 clear all
 % Define the directory containing the PNG files
-imageDir = '/Users/raaghavt/Desktop/scanningFolder'; % Change this to your directory
+imageDir = '/Users/raaghavt/Desktop/UCSB/Summer/FiberClogging/scanningFolder'; % Change this to your directory
 imageFiles = dir(fullfile(imageDir, '*.png'));
 
 % Preallocate a list to hold the images
@@ -45,7 +45,7 @@ title('Tilted Spatiotemporal Diagram');
 % Add x-axis labels for each slice with ticks every 100 frames
 numSlices = numFiles; % Number of slices corresponds to the number of images
 xTickPositions = 1:100:numSlices; % Positions for every 100 frames
-xTickLabels = arrayfun(@num2str, xTickPositions, 'UniformOutput', false);
+xTickLabels = arrayfun(@num2str, xTickPositions/4, 'UniformOutput', false);
 
 % Ensure the x-tick positions do not exceed the width of the image
 xTickPositions = xTickPositions(xTickPositions <= size(spatiotemporalDiagramTilted, 2));
@@ -53,7 +53,7 @@ xTickPositions = xTickPositions(xTickPositions <= size(spatiotemporalDiagramTilt
 % Set x-ticks and labels
 xticks(xTickPositions);
 xticklabels(xTickLabels);
-xlabel('Slice Number');
+xlabel('time (s)');
 
 % Adjust axis properties
 set(gca, 'YDir', 'normal'); % Set Y-axis to normal for image display
