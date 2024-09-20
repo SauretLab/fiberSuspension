@@ -1,7 +1,23 @@
 clear
 clc
 
-dataNames = {"2o5"};
+%dataNames = {"1","2o5","5","7o5", "10","15", "20", "5v2"};
+dataNames = {"5","5v2"};
+
+volume = pi * 0.5^2 * 4/3; % mL %% volume cylinder + volume cone
+
+flowrates =[0.5 1 2.5 5 7.5 10 15 20] /60 ; % ml/s
+
+dnozzle  = 1.5 / 1000;                              % mm
+density  = 1049 * 1000;                             % kg/m^3
+velocity = flowrates * 1e-6 / (pi * (dnozzle/2)^2); % m/s
+dynamicViscosity = 75/1000;                         % kg/(ms)
+
+Re = density * velocity * dnozzle / dynamicViscosity;
+
+% Print statement
+fprintf('At each flowrate \n Q = [%s] ml/min has a Reynolds number \n Re = [%s]\n', ...
+    num2str(flowrates*60, '%.1f '), num2str(Re, '%.1f '));
 
 for nDatasets = 1:length(dataNames)
 
@@ -21,129 +37,163 @@ for nDatasets = 1:length(dataNames)
 
     %%%%%%%%%%%%%%%%%%%% Nozzle %%%%%%%%%%%%%%%%%%%%%%%%%%%%
     % diameter 1.5 mm
-    t_clog_phi_30_2o5 = readmatrix('/Users/raaghavt/Desktop/UCSB/Summer/FiberClogging/fiber/autoSys/clogData/clogTimes_phi_30_ts500_2-5mlMin');
+
+    t_clog_phi_30_1  = readmatrix('/Users/raaghavt/Desktop/UCSB/Summer/FiberClogging/fiber/autoSys/clogData/clogTimes_phi_30_ts500_1mlMin');
+    t_clog_phi_30_1(t_clog_phi_30_1 < 2.1 | t_clog_phi_30_1 > 1000) = [97.6];
+    t_clog_phi_30_1 = t_clog_phi_30_1.';
+
+    t_clog_phi_30_2o5 = readmatrix('/Users/raaghavt/Desktop/UCSB/Summer/FiberClogging/fiber/autoSys/clogData/clogTimes_phi_30_ts500_2o5mlMin');
     
     t_clog_phi_30_2o5(t_clog_phi_30_2o5 < 5.1 | t_clog_phi_30_2o5 > 1000) = [];
     t_clog_phi_30_2o5 = t_clog_phi_30_2o5.';
 
-    t_clog_phi_30_5   = [22, 24];
-    t_clog_phi_30_7o5 = [26, 28];
-    t_clog_phi_30_10  = [30, 32];
-    t_clog_phi_30_15  = [34, 36];
-    t_clog_phi_30_20  = [38, 40];
+    t_clog_phi_30_5   = readmatrix('/Users/raaghavt/Desktop/UCSB/Summer/FiberClogging/fiber/autoSys/clogData/clogTimes_phi_30_ts500_5mlMin');
+    
+    t_clog_phi_30_5(t_clog_phi_30_5 < 2.1 | t_clog_phi_30_5 > 1000) = [];
+    t_clog_phi_30_5 = t_clog_phi_30_5.';
+
+    t_clog_phi_30_5v2   = readmatrix('/Users/raaghavt/Desktop/UCSB/Summer/FiberClogging/fiber/autoSys/clogData/clogTimes_phi_30v2_ts500_5mlMin');
+    
+    t_clog_phi_30_5v2(t_clog_phi_30_5v2 < 2.1 | t_clog_phi_30_5v2 > 1000) = [];
+    t_clog_phi_30_5v2 = t_clog_phi_30_5v2.';
+
+    t_clog_phi_30_7o5 = readmatrix('/Users/raaghavt/Desktop/UCSB/Summer/FiberClogging/fiber/autoSys/clogData/clogTimes_phi_30_ts500_7o5mlMin');
+    
+    t_clog_phi_30_7o5(t_clog_phi_30_7o5 < 1.1 | t_clog_phi_30_7o5 > 1000) = [];
+    t_clog_phi_30_7o5 = t_clog_phi_30_7o5.';
+
+
+    t_clog_phi_30_10  = readmatrix('/Users/raaghavt/Desktop/UCSB/Summer/FiberClogging/fiber/autoSys/clogData/clogTimes_phi_30_ts500_10mlMin');
+    t_clog_phi_30_10(t_clog_phi_30_10 < 1.1 | t_clog_phi_30_10 > 1000) = [];
+    t_clog_phi_30_10 = t_clog_phi_30_10.';
+
+    t_clog_phi_30_15  = readmatrix('/Users/raaghavt/Desktop/UCSB/Summer/FiberClogging/fiber/autoSys/clogData/clogTimes_phi_30_ts500_15mlMin');
+    t_clog_phi_30_15(t_clog_phi_30_15 < 2.1 | t_clog_phi_30_15 > 1000) = [];
+    t_clog_phi_30_15 = t_clog_phi_30_15.';
+
+    t_clog_phi_30_15v2  = readmatrix('/Users/raaghavt/Desktop/UCSB/Summer/FiberClogging/fiber/autoSys/clogData/clogTimes_phi_30v2_ts500_15mlMin');
+    t_clog_phi_30_15v2(t_clog_phi_30_15v2 < 2.1 | t_clog_phi_30_15v2 > 1000) = [];
+    t_clog_phi_30_15v2 = t_clog_phi_30_15v2.';
+
+    t_clog_phi_30_20  = readmatrix('/Users/raaghavt/Desktop/UCSB/Summer/FiberClogging/fiber/autoSys/clogData/clogTimes_phi_30_ts500_20mlMin');
+    t_clog_phi_30_20(t_clog_phi_30_20 < 2.1 | t_clog_phi_30_20 > 1000) = [];
+    t_clog_phi_30_20 = t_clog_phi_30_20.';
+
+
+
+    axis_phi_30_1   = [0, 10, 0, 150];
+    axis_phi_30_2o5 = [0, 50, 0, 80];
+    axis_phi_30_5   = [0, 50, 0, 40];
+    axis_phi_30_5v2 = [0, 50, 0, 80];
+    axis_phi_30_7o5 = [0, 50, 0, 25];
+    axis_phi_30_10  = [0, 50, 0, 30];
+    axis_phi_30_15  = [0, 75, 0, 40];
+    axis_phi_30_20  = [0, 50, 0, 40];
     
 
-
-
-    axis_phi_30_2o5 = [0 50 0 100];
-    axis_phi_10_old = [0 85 0 200];
-
-    axis_phi_10_press = [0 150 0 150];
-
-    axis_phi_5 = [0 100 0 150];
-    axis_phi_10 = [0 85 0 100];
-
-    axis_phi_5_600um = [0 50 0 500];
-    axis_phi_10_600um = [0 210 0 200];
-    axis_phi_20_600um = [0 210 0 200];
-    axis_phi_20_600um_NF = [0 1050 0 200];
-
-    axis_phi_1_old = [0 3 0 3000];
-    axis_phi_1 = [0 20 0 300];
-
-    figtix = (nDatasets - 1) * 5;
+    figtix = nDatasets+1;
 
     % Dynamically change which variables to use based on `nDatasets`
 
     if contains(dataNames{nDatasets}, '2o5')
-        showThisPhi = t_clog_phi_30_2o5;  % Assuming t_clog_phi_10 exists
-        useThisAxis = axis_phi_30_2o5;    % Assuming axis_phi_10 exists
+        showThisData  = t_clog_phi_30_2o5;  % Assuming t_clog_phi_30_2o5 exists
+        useThisAxis   = axis_phi_30_2o5;    % Assuming axis_phi_30_2o5 exists
         showThisTitle = 'Q = 2.5 ml/min';
-    elseif contains(dataNames{nDatasets}, '10_old')
-        showThisPhi = t_clog_phi_10_old;  % Assuming t_clog_phi_10 exists
-        useThisAxis = axis_phi_10_old;    % Assuming axis_phi_10 exists
-        showThisTitle = 'phi old = 10%';    
-    elseif contains(dataNames{nDatasets}, '10_press')
-        showThisPhi = t_clog_phi_10_press;  % Assuming t_clog_phi_10 exists
-        useThisAxis = axis_phi_10_press;    % Assuming axis_phi_10 exists
-        showThisTitle = 'phi prs = 10%';
-    elseif contains(dataNames{nDatasets}, '5_600um')
-        showThisPhi = t_clog_phi_5_600um;  % Assuming t_clog_phi_5 exists
-        useThisAxis = axis_phi_5_600um;    % Assuming axis_phi_5 exists
-        showThisTitle = 'phi viz = 5%, L600um';
-    elseif contains(dataNames{nDatasets}, '10_600um')
-        showThisPhi = t_clog_phi_10_600um;  % Assuming t_clog_phi_10 exists
-        useThisAxis = axis_phi_10_600um;    % Assuming axis_phi_10 exists
-        showThisTitle = 'phi viz = 10%, L600um';
-    elseif contains(dataNames{nDatasets}, '5')
-        showThisPhi = t_clog_phi_5;  % Assuming t_clog_phi_5 exists
-        useThisAxis = axis_phi_5;    % Assuming axis_phi_5 exists
-        showThisTitle = 'phi viz = 5%';
+    elseif contains(dataNames{nDatasets}, '7o5')
+        showThisData  = t_clog_phi_30_7o5;  % Assuming t_clog_phi_30_7o5 exists
+        useThisAxis   = axis_phi_30_7o5;    % Assuming axis_phi_30_7o5 exists
+        showThisTitle = 'Q = 7.5 ml/min';
+    elseif contains(dataNames{nDatasets}, '10v2')
+        showThisData  = t_clog_phi_30_10v2;   % Assuming t_clog_phi_30_10 exists
+        useThisAxis   = axis_phi_30_10v2;     % Assuming axis_phi_30_10 exists
+        showThisTitle = 'Q v2 = 10 ml/min';
     elseif contains(dataNames{nDatasets}, '10')
-        showThisPhi = t_clog_phi_10;  % Assuming t_clog_phi_10 exists
-        useThisAxis = axis_phi_10;    % Assuming axis_phi_10 exists
-        showThisTitle = 'phi viz = 10%';
-    elseif contains(dataNames{nDatasets}, '1_old')
-        showThisPhi = t_clog_phi_1_old;  % Assuming t_clog_phi_10 exists
-        useThisAxis = axis_phi_1_old;    % Assuming axis_phi_10 exists
-        showThisTitle = 'phi old = 1%'; 
+        showThisData  = t_clog_phi_30_10;   % Assuming t_clog_phi_30_10 exists
+        useThisAxis   = axis_phi_30_10;     % Assuming axis_phi_30_10 exists
+        showThisTitle = 'Q = 10 ml/min';
+    elseif contains(dataNames{nDatasets}, '15v2')
+        showThisData  = t_clog_phi_30_15v2;   % Assuming t_clog_phi_30_15 exists
+        useThisAxis   = axis_phi_30_15v2;     % Assuming axis_phi_30_15 exists
+        showThisTitle = 'Q v2 = 15 ml/min';
+    elseif contains(dataNames{nDatasets}, '15')
+        showThisData  = t_clog_phi_30_15;   % Assuming t_clog_phi_30_15 exists
+        useThisAxis   = axis_phi_30_15;     % Assuming axis_phi_30_15 exists
+        showThisTitle = 'Q = 15 ml/min';
+    elseif contains(dataNames{nDatasets}, '5v2')
+        showThisData  = t_clog_phi_30_5v2;    % Assuming t_clog_phi_30_5 exists
+        useThisAxis   = axis_phi_30_5v2;      % Assuming axis_phi_30_5 exists
+        showThisTitle = 'Q v2 = 5 ml/min';
+    elseif contains(dataNames{nDatasets}, '5')
+        showThisData  = t_clog_phi_30_5;    % Assuming t_clog_phi_30_5 exists
+        useThisAxis   = axis_phi_30_5;      % Assuming axis_phi_30_5 exists
+        showThisTitle = 'Q = 5 ml/min';
+    elseif contains(dataNames{nDatasets}, '20')
+        showThisData  = t_clog_phi_30_20;   % Assuming t_clog_phi_30_20 exists
+        useThisAxis   = axis_phi_30_20;     % Assuming axis_phi_30_20 exists
+        showThisTitle = 'Q = 20 ml/min';
     elseif contains(dataNames{nDatasets}, '1')
-        showThisPhi = t_clog_phi_1;  % Assuming t_clog_phi_10 exists
-        useThisAxis = axis_phi_1;    % Assuming axis_phi_10 exists
-        showThisTitle = 'phi viz = 1%'; 
-    elseif contains(dataNames{nDatasets}, 'elephant')
-        showThisPhi = t_clog_phi_20_600um_NF;  % Assuming t_clog_phi_10 exists
-        useThisAxis = axis_phi_20_600um_NF;    % Assuming axis_phi_10 exists
-        showThisTitle = 'phi viz no filter = 20%'; 
-    elseif contains(dataNames{nDatasets}, '20_600um')
-        showThisPhi = t_clog_phi_20_600um;  % Assuming t_clog_phi_10 exists
-        useThisAxis = axis_phi_20_600um;    % Assuming axis_phi_10 exists
-        showThisTitle = 'phi viz = 20%'; 
+        showThisData  = t_clog_phi_30_1;   % Assuming t_clog_phi_30_20 exists
+        useThisAxis   = axis_phi_30_1;     % Assuming axis_phi_30_20 exists
+        showThisTitle = 'Q = 20 ml/min';
+    else
+        error('Unknown dataset label');
     end
+    
 
 
 
 
+    %plot once only
+    if nDatasets == 1
+        %%%%%%%%%%%%% Average Value %%%%%%%%%%%%%%%
+        Qvals=[1 2.5 5 7.5 10 15 20];
+
+        mean_t_clog=[mean(t_clog_phi_30_1) mean(t_clog_phi_30_2o5), mean(t_clog_phi_30_5), mean(t_clog_phi_30_7o5), mean(t_clog_phi_30_10), mean(t_clog_phi_30_15), mean(t_clog_phi_30_20)];
+
+        Qvalsv2=[5 15];
+
+        mean_t_clogv2=[mean(t_clog_phi_30_5v2) mean(t_clog_phi_30_15v2)];
+
+        figure(1)
+        hold on
+
+        yyaxis left
+        plot(Qvals,mean_t_clog,'o','MarkerFaceColor',ccolor(1,:),'MarkerEdgeColor','k', 'MarkerSize',Size_Marker)
+        plot(Qvals,mean_t_clog,'--','Color',ccolor(1,:))
+        plot(Qvalsv2,mean_t_clogv2,'o','MarkerFaceColor',[0 1 1],'MarkerEdgeColor','k', 'MarkerSize',Size_Marker)
+        plot(Qvalsv2,mean_t_clogv2,'--','Color',[0 1 1])
+        axis([0 Qvals(end) + Qvals(1) 0 120])
+        xlabel('$Q(\frac{ml}{min})$','Interpreter','latex')
+        ylabel('$\langle t_{\rm clog} \rangle$ (s)','Interpreter','latex')
+        set(gca,'FontSize',20)
 
 
-    %%%%%%%%%%%%% Average Value %%%%%%%%%%%%%%%
-    Qvals=[2.5 5 7.5 10 15 20];
-
-    mean_t_clog=[mean(t_clog_phi_30_2o5), mean(t_clog_phi_30_5), mean(t_clog_phi_30_7o5), mean(t_clog_phi_30_10), mean(t_clog_phi_30_15), mean(t_clog_phi_30_20)];
-
-    figure(figtix+1)
-    subplot(2,2,1)
-    yyaxis left
-    plot(Qvals,mean_t_clog,'o','MarkerFaceColor',ccolor(1,:),'MarkerEdgeColor','k', 'MarkerSize',Size_Marker)
-    axis([0 20 0 2000])
-    xlabel('$Q(\frac{ml}{min})$','Interpreter','latex')
-    ylabel('$\langle t_{\rm clog} \rangle$ (s)','Interpreter','latex')
-    set(gca,'FontSize',20)
-
-
-    %%%%%%%  Average Volume %%%%%%%%%%%%%%%
-    Q=0.5; %Flow rate in mL/min
-    Q_s=Q./60; %Flow rate in mL/s
-    yyaxis right
-    plot(Qvals,mean_t_clog.*Q,'o','MarkerFaceColor',ccolor(4,:),'MarkerEdgeColor','k', 'MarkerSize',Size_Marker)
-    ylabel('$\langle Q_{\rm clog} \rangle$ (mL)','Interpreter','latex')
-    ylim([0 2000])
-    title('Average Extrusion Until Clog')
-
+        %%%%%%%  Average Volume %%%%%%%%%%%%%%%
+        Q=0.5; %Flow rate in mL/min
+        Q_s=Q./60; %Flow rate in mL/s
+        yyaxis right
+        hold on
+        plot(Qvals,mean_t_clog.*Qvals/60,'o','MarkerFaceColor',ccolor(4,:),'MarkerEdgeColor','k', 'MarkerSize',Size_Marker)
+        plot(Qvals,mean_t_clog.*Qvals/60,'--','Color',ccolor(4,:))
+        plot(Qvalsv2,mean_t_clogv2.*Qvalsv2/60,'o','MarkerFaceColor',[1 0.4 0.4],'MarkerEdgeColor','k', 'MarkerSize',Size_Marker)
+        plot(Qvalsv2,mean_t_clogv2.*Qvalsv2/60,'--','Color',[1 0.4 0.4])
+        ylabel('$\langle Q_{\rm clog} \rangle$ (mL)','Interpreter','latex')
+        ylim([0 12])
+        title('Average Extrusion Until Clog')
+        pause(30)
+    end
 
     %%%%%%%%%%%%%  Moving Average %%%%%%%%%%%%%%%
     %%%% phi=10%
-    %t_clog_phi_10 = [18, 20, 29, 11,  78, 21,  12,  46,  30, 35, 100, 15, 115, 44, 11, 76, 24, 32, 179, 24, 62, 18, 22, 31,26, 246, 33, 82, 45, 104, 29];
+    %showThisData = [18, 20, 29, 11,  78, 21,  12,  46,  30, 35, 100, 15, 115, 44, 11, 76, 24, 32, 179, 24, 62, 18, 22, 31,26, 246, 33, 82, 45, 104, 29];
 
-    t_clog_phi_10 = showThisPhi;
-
-    for i=1:size(t_clog_phi_10,2)
-        Mov_t_clog_10(i)=mean(t_clog_phi_10(1:i));
+    for i=1:size(showThisData,2)
+        Mov_t_clog_10(i)=mean(showThisData(1:i));
         N_i(i)=i;
     end
 
     figure(figtix+1)
-    subplot(2,2,2)
+    subplot(2,2,1)
     plot(N_i,Mov_t_clog_10,'o','MarkerFaceColor',ccolor(1,:),'MarkerEdgeColor','k', 'MarkerSize',Size_Marker)
     axis(useThisAxis)
     xlabel('$\#$Experiments','Interpreter','latex')
@@ -161,11 +211,11 @@ for nDatasets = 1:length(dataNames)
 
     %%%%%%%%%%%%%  Distribution %%%%%%%%%%%%%%%
     %%%% phi=10%
-    %t_clog_phi_10 = [18, 20, 29, 11,  78, 21,  12,  46,  30, 35, 100, 15, 115, 44, 11, 76, 24, 32, 179, 24, 62, 18, 22, 31,26, 246, 33, 82, 45, 104, 29];
+    %showThisData = [18, 20, 29, 11,  78, 21,  12,  46,  30, 35, 100, 15, 115, 44, 11, 76, 24, 32, 179, 24, 62, 18, 22, 31,26, 246, 33, 82, 45, 104, 29];
 
     figure(figtix+1)
-    subplot(2,2,3)
-    h_10=histogram(t_clog_phi_10,6,'Normalization', 'probability');
+    subplot(2,2,2)
+    h_10=histogram(showThisData,6,'Normalization', 'probability');
     x=h_10.BinEdges(1:end-1)+h_10.BinWidth./2;
     y=h_10.Values;
     axis([0 x(end)*1.2 0 1])
@@ -175,18 +225,18 @@ for nDatasets = 1:length(dataNames)
     title(showThisTitle)
 
     %%%% Fit Data
-    yy=log(y);
-    x=x(isfinite(yy));
-    y = y(isfinite(yy));
+    yy = log(y);
+    x  = x(isfinite(yy));
+    y  = y(isfinite(yy));
     yy = yy(isfinite(yy));
 
 
     figure(figtix+1)
-    subplot(2,2,4)
+    subplot(2,2,3)
     plot(x,y,'o','MarkerFaceColor',ccolor(2,:),'MarkerEdgeColor','k', 'MarkerSize',Size_Marker)
     hold on
-    s= mean(t_clog_phi_10);
-    x_fit=0:1:2000;
+    s     = mean(showThisData);
+    x_fit = 0:1:2000;
     loglog(x_fit,exp(-x_fit./s),'--','Color', ccolor(2,:),'linewidth',SizeLine)
     set(gca,'yscale','log');
     ylabel('$p(t_{\rm clog})$','Interpreter','latex')
@@ -199,21 +249,21 @@ for nDatasets = 1:length(dataNames)
 
     %%%%% Try different order randomly
 
-    %t_clog_phi_10 = [18, 20, 29, 11,  78, 21,  12,  46,  30, 35, 100, 15, 115, 44, 11, 76, 24, 32, 179, 24, 62, 18, 22, 31,26, 246, 33, 82, 45, 104, 29];
+    %showThisData = [18, 20, 29, 11,  78, 21,  12,  46,  30, 35, 100, 15, 115, 44, 11, 76, 24, 32, 179, 24, 62, 18, 22, 31,26, 246, 33, 82, 45, 104, 29];
 
-    t1=t_clog_phi_10(randperm(length(t_clog_phi_10)));
-    t2=t_clog_phi_10(randperm(length(t_clog_phi_10)));
-    t3=t_clog_phi_10(randperm(length(t_clog_phi_10)));
-    t4=t_clog_phi_10(randperm(length(t_clog_phi_10)));
-    t5=t_clog_phi_10(randperm(length(t_clog_phi_10)));
-    t6=t_clog_phi_10(randperm(length(t_clog_phi_10)));
-    t7=t_clog_phi_10(randperm(length(t_clog_phi_10)));
-    t8=t_clog_phi_10(randperm(length(t_clog_phi_10)));
-    t9=t_clog_phi_10(randperm(length(t_clog_phi_10)));
+    t1=showThisData(randperm(length(showThisData)));
+    t2=showThisData(randperm(length(showThisData)));
+    t3=showThisData(randperm(length(showThisData)));
+    t4=showThisData(randperm(length(showThisData)));
+    t5=showThisData(randperm(length(showThisData)));
+    t6=showThisData(randperm(length(showThisData)));
+    t7=showThisData(randperm(length(showThisData)));
+    t8=showThisData(randperm(length(showThisData)));
+    t9=showThisData(randperm(length(showThisData)));
 
 
-    for i=1:size(t_clog_phi_10,2)
-    Mov_t_clog_10(i)=mean(t_clog_phi_10(1:i));
+    for i=1:size(showThisData,2)
+    Mov_t_clog_10(i)=mean(showThisData(1:i));
     Mov_t1(i)=mean(t1(1:i));
     Mov_t2(i)=mean(t2(1:i));
     Mov_t3(i)=mean(t3(1:i));
@@ -226,7 +276,8 @@ for nDatasets = 1:length(dataNames)
     N_i(i)=i;
     end
 
-    figure(figtix+2)
+    figure(figtix+1)
+    subplot(2,2,4)
     plot(N_i,Mov_t_clog_10,'o','MarkerFaceColor',ccolor2(1,:),'MarkerEdgeColor','k', 'MarkerSize',Size_Marker2)
     hold on
     plot(N_i,Mov_t1,'o','MarkerFaceColor',ccolor2(2,:),'MarkerEdgeColor','k', 'MarkerSize',Size_Marker2)
@@ -251,20 +302,20 @@ for nDatasets = 1:length(dataNames)
 
     N=10000;
     for j=1:N
-    for i=1:size(t_clog_phi_10,2)
-    t1=t_clog_phi_10(randperm(length(t_clog_phi_10)));
+    for i=1:size(showThisData,2)
+    t1=showThisData(randperm(length(showThisData)));
     Mov_t(i,j)=mean(t1(1:i));
     end
     end
 
-    for i=1:size(t_clog_phi_10,2)
+    for i=1:size(showThisData,2)
     Max_Mov_t(i)=max(Mov_t(i,:));
     Min_Mov_t(i)=min(Mov_t(i,:));
     Mean_Mov_t(i)=mean(Mov_t(i,:));
     STD_Mov_t(i)=std(Mov_t(i,:));
     end
 
-    figure(figtix+2)
+    figure(figtix+1)
     plot(N_i,Mean_Mov_t,'k-','linewidth',SizeLine)
     hold on
     plot(N_i,Max_Mov_t,'k-.','linewidth',SizeLine)
@@ -322,5 +373,5 @@ for nDatasets = 1:length(dataNames)
 
     clear
 
-    dataNames = {"5_old", "10_old","10_press", "5_600um", "10_600um", "5", "10", "1_old","1","20_600um_NF","20_600um"};
+    dataNames = {"5","5v2"};
 end
